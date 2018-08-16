@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import {memorized, show, deleteWord} from '../redux/actionCreators';
 
 class Word extends Component {
         render() {
             const {en, vn, memorized, id, isShow} = this.props.item;
+            const {index} = this.props;
             const textDecorationLine = memorized? 'line-through' : 'none';
             const showTextVn = isShow? vn : '--------------------';
         return (
@@ -12,11 +14,20 @@ class Word extends Component {
                 <Text style={{textDecorationLine}}>{this.props.item.en}</Text>
                 <Text>{showTextVn}</Text>
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-                    <TouchableOpacity onPress={()=>this.props.dispatch({type:'MEMORIZED', id})}>
+                    <TouchableOpacity onPress={()=>
+                            this.props.memorized(id)
+                        }>
                         <Text style={styles.text_button}>{memorized? 'Forget' : 'Memorized'}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this.props.dispatch({type:'SHOW', id})}>
+                    <TouchableOpacity onPress={()=>
+                            this.props.show(id)
+                        }>
                         <Text style={styles.text_button}>{isShow? 'Hidden': 'Show'}</Text>  
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>
+                            this.props.deleteWord(id)
+                        }>
+                        <Text style={styles.text_button}>Delete</Text>  
                     </TouchableOpacity>    
                 </View>
             </View>
@@ -24,7 +35,7 @@ class Word extends Component {
     }
 }
 
-export default connect()(Word);
+export default connect(null, {memorized, show, deleteWord})(Word);
 
 const styles = StyleSheet.create({
     container:{

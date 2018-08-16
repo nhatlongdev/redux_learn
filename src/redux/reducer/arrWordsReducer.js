@@ -25,6 +25,14 @@ const arrWordsReducer = (state=defaultArrWords, action)=>{
         if(e.id === action.id) return {...e, isShow: !e.isShow};
         return e;
     })
+
+    if(action.type === 'ADD_WORD') 
+    return [{id:state.length+1, en:action.en, vn:action.vn, memorized:false, isShow:false}].concat(state);
+
+    if(action.type === 'DELETE_WORD') return state.filter(e=>{
+        if(e.id !== action.id) return e;
+    })
+       
     return state;
 }
 
